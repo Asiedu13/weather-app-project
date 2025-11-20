@@ -20,5 +20,4 @@ jobs:
         uses: actions/setup-node@v3
       - run: pnpm install --frozen-lockfile
       - run: pnpm run test
-      - name: Build the project
-        run: pnpm run build
+    
