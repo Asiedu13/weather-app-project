@@ -7,7 +7,7 @@ on:
     branches: [develop, main]
 
 jobs:
-  build-the-app:
+  build-and-test:
     runs-on: ubuntu@latest
 
     steps:
