@@ -1,4 +1,4 @@
-export const OPTIONS = {
+  export const OPTIONS = {
   method: "GET",
     headers: {
       "X-RapidAPI-Key": process.env.NEXT_PUBLIC_rapidAPIKey,
