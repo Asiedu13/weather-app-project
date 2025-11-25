@@ -14,7 +14,7 @@ export default function Page () {
     useEffect(() => {
         if (typeof window !== "undefined") {
             OneSignal.init({
-                appId: "45736a79-2dc5-487b-b859-b20429cd9534",
+                appId: process.env.NEXT_PUBLIC_ONESIGNAL_APPID,
                 notificationButton: {
                     enable: true
                 }
