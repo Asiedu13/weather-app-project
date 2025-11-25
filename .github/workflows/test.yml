@@ -1,0 +1,23 @@
+name: Run all unit tests
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+  push:
+    branches: [develop]
+
+jobs:
+  test-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install pnpm
+        run: npm install -g pnpm@latest-10
+      - name: checkout branch
+        uses: actions/checkout@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run test
+    

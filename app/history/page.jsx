@@ -1,4 +1,4 @@
-import HistoryHome from "../components/UserHistory/HistoryHome";
+import { HistoryHome } from "../components/UserHistory/HistoryHome";
 
 export const metadata = {
   title: "Weather App | History",

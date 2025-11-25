@@ -1,0 +1,23 @@
+name: Build the app
+on:
+  push:
+    branches: [develop, main]
+
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install pnpm
+        run: npm install -g pnpm@latest-10
+      - name: Checkout branch
+        uses: actions/checkout@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+      - name: run install
+        run: pnpm install --frozen-lockfile
+      - name: build app
+        run: pnpm run build
