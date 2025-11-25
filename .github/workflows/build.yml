@@ -14,9 +14,9 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm@latest-10
       - name: Checkout branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
       - name: run install
         run: pnpm install --frozen-lockfile
       - name: build app
