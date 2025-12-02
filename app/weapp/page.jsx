@@ -15,16 +15,37 @@ export default function Page() {
     if (!("Notification" in window)) {
       alert("Notifications is not supported in this browser");
     } else if (Notification.permission === "granted") {
-       if (navigator) {
-         navigator.serviceWorker.register("/sw.js");
-       } 
+      if (navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
       navigator.serviceWorker.ready.then((registration) => {
          registration.showNotification("Vibration Sample", {
            body: "Buzz! Buzz!",
            vibrate: [200, 100, 200, 100, 200, 100, 200],
            tag: "vibration-sample",
          });
-       });
+        const alertWeatherInterval = setInterval(() => {
+          const theresValidWeatherData = !!locationData;
+          if(theresValidWeatherData) {
+              registration.showNotification(
+                `${locationData.current.condition.text}`,
+                {
+                  body: `${locationData.current.feelslike_c} degrees in ${locationData?.location?.name}`,
+                  icon: `https:${locationData.current.condition.icon}`,
+                  vibrate: [200, 100, 200, 100, 200, 100, 200],
+                  tag: "vibration-sample",
+                }
+              );
+          } else {
+            registration.showNotification("Vibration Sample", {
+              body: "Buzz! Buzz!",
+              vibrate: [200, 100, 200, 100, 200, 100, 200],
+              tag: "vibration-sample",
+            });
+          }
+        
+        }, 1000 * 60);
+      });
       // const notifier = new Notification("Hi there! I am working!");
     } else if (Notification.permission !== "denied") {
       Notification.requestPermission().then((permission) => {
@@ -32,8 +53,6 @@ export default function Page() {
           const notification = new Notification("Heylooo", {
             requireInteraction: true,
           });
-         
-         
         }
       });
     }
