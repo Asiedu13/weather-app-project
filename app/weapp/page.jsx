@@ -7,9 +7,37 @@ import LoaderComponent from "../components/Loaders/main";
 import { saveWeather } from "../utils/functions";
 import OneSignal from "react-onesignal";
 
-export default function Page () {
+export default function Page() {
   const [locationData, setLocationData] = useState(null);
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!("Notification" in window)) {
+      alert("Notifications is not supported in this browser");
+    } else if (Notification.permission === "granted") {
+       if (navigator) {
+         navigator.serviceWorker.register("/sw.js");
+       } 
+      navigator.serviceWorker.ready.then((registration) => {
+         registration.showNotification("Vibration Sample", {
+           body: "Buzz! Buzz!",
+           vibrate: [200, 100, 200, 100, 200, 100, 200],
+           tag: "vibration-sample",
+         });
+       });
+      // const notifier = new Notification("Hi there! I am working!");
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          const notification = new Notification("Heylooo", {
+            requireInteraction: true,
+          });
+         
+         
+        }
+      });
+    }
+  });
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -23,43 +51,44 @@ export default function Page () {
     }, []);
   useEffect(() => {
     if ("geolocation" in navigator) {
-      console.log("geo works")
+      console.log("geo works");
     }
     async function getCoords() {
-      navigator.geolocation.getCurrentPosition((position) => {
-            let data = getWeatherInfo(position.coords.longitude,  position.coords.latitude);
-            console.log(data)
-          }, (positionError) => setError('Error'))
-        }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          let data = getWeatherInfo(
+            position.coords.longitude,
+            position.coords.latitude
+          );
+          console.log(data);
+        },
+        (positionError) => setError("Error")
+      );
+    }
 
     async function getWeatherInfo(lng, lat) {
       const URL = `https://weatherapi-com.p.rapidapi.com/current.json?q=${lat}%2C${lng}`;
       const options = {
         method: "GET",
-          headers: {
-            "X-RapidAPI-Key": process.env.NEXT_PUBLIC_rapidAPIKey,
-            "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com",
+        headers: {
+          "X-RapidAPI-Key": process.env.NEXT_PUBLIC_rapidAPIKey,
+          "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com",
         },
       };
       try {
         const response = await fetch(URL, options);
         const result = await response.json();
-        setLocationData(result)
-
-      } catch(error) {
-
-      }
+        setLocationData(result);
+      } catch (error) {}
     }
 
-    getCoords()
+    getCoords();
   }, []);
 
   if (!locationData) {
-    return (
-      <LoaderComponent />
-    )
+    return <LoaderComponent />;
   }
-  
+
   return (
     <>
       <main className="w-screen h-screen flex flex-row justify-center items-center p-4 ">
@@ -123,5 +152,4 @@ export default function Page () {
       </main>
     </>
   );
-};
-
+}
