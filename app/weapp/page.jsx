@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState, Suspense } from "react";
 import LoaderComponent from "../components/Loaders/main";
 import { saveWeather } from "../utils/functions";
+import OneSignal from "react-onesignal";
 
 export default function Page() {
   const [locationData, setLocationData] = useState(null);
@@ -57,6 +58,16 @@ export default function Page() {
     }
   });
 
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            OneSignal.init({
+                appId: process.env.NEXT_PUBLIC_ONESIGNAL_APPID,
+                notificationButton: {
+                    enable: true
+                }
+            })
+        }
+    }, []);
   useEffect(() => {
     if ("geolocation" in navigator) {
       console.log("geo works");
